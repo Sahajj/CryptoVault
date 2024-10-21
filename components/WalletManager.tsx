@@ -32,6 +32,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 
+
 interface Wallet {
   publicKey: string;
   privateKey: string;
@@ -74,7 +75,6 @@ const WalletGenrator = () => {
   const handleDetleWallet = (index: number) => {
     const updatedWallets = wallets.filter((_, i) => i !== index);
     const updatedPathTypes = pathTypes.filter((_, i) => i !== index);
-
     setWallets(updatedWallets);
     setPathTypes(updatedPathTypes);
     localStorage.setItem("wallets", JSON.stringify(updatedWallets));
@@ -107,11 +107,6 @@ const WalletGenrator = () => {
     );
   };
 
-  const togglePhraseVisibility = (index: number) => {
-    setVisiblePhrases(
-      visiblePhrases.map((visible, i) => (i === index ? !visible : visible))
-    );
-  };
 
   const generateWalletFromMnemonic = (
     pathType: string,
@@ -144,8 +139,6 @@ const WalletGenrator = () => {
         toast.error("UnSupported path type.");
         return null;
       }
-      console.log(privateKeyEncoded);
-      console.log(publicKeyEncoded);
 
       return {
         publicKey: publicKeyEncoded,
@@ -155,13 +148,14 @@ const WalletGenrator = () => {
       };
     } catch (error) {
       toast.error("Failed to generate wallet. Please try again.");
+      console.log(error)
       return null;
     }
   };
 
   const handleGenrateWallet = () => {
     let mnemonic = mnemonicInput.trim();
-    console.log(mnemonic);
+    
 
     if (mnemonic) {
       if (!validateMnemonic(mnemonic)) {
@@ -433,7 +427,7 @@ const WalletGenrator = () => {
               gridView ? "md:grid-cols-2 lg:grid-cols-3" : ""
             }`}
           >
-            {wallets.map((wallet: any, index: number) => (
+            {wallets.map((wallet: Wallet, index: number) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: -20 }}
